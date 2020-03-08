@@ -13,8 +13,8 @@ InputManager:
     positiveButton: right
     altNegativeButton: a
     altPositiveButton: d
-    gravity: 3
-    dead: 0.001
+    gravity: 5
+    dead: 0.01
     sensitivity: 3
     snap: 1
     invert: 0
@@ -29,8 +29,8 @@ InputManager:
     positiveButton: up
     altNegativeButton: s
     altPositiveButton: w
-    gravity: 3
-    dead: 0.001
+    gravity: 5
+    dead: 0.01
     sensitivity: 3
     snap: 1
     invert: 0
@@ -553,10 +553,10 @@ InputManager:
     m_Name: Oculus_CrossPlatform_PrimaryThumbstickHorizontal
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    negativeButton: left
+    positiveButton: right
+    altNegativeButton: a
+    altPositiveButton: d
     gravity: 0
     dead: 0.19
     sensitivity: 1
@@ -569,10 +569,10 @@ InputManager:
     m_Name: Oculus_CrossPlatform_PrimaryThumbstickVertical
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    negativeButton: down
+    positiveButton: up
+    altNegativeButton: s
+    altPositiveButton: w
     gravity: 0
     dead: 0.19
     sensitivity: 1
