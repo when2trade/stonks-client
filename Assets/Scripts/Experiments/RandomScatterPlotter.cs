@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using TMPro;
+
 /// <summary>
 /// Makes a random 3D scatter plot, used in the ScatterIneractTest experiment.
 /// </summary>
@@ -18,6 +20,12 @@ public class RandomScatterPlotter : MonoBehaviour
     //edge colours
     public Color weakPositiveColor = Color.white, strongPositiveColor = Color.green, 
         weakNegativeColor = Color.white, strongNegativeColor = Color.red;
+
+    public SectorColorScheme sectorColors;
+    
+    public Transform headTransform; //reference to head for billboarding
+
+    public TextAsset tickers;
 
     void Start()
     {
@@ -46,11 +54,22 @@ public class RandomScatterPlotter : MonoBehaviour
         }
         Debug.Log(edges.Count+" edges");
 
-        foreach(Vector3 point in points){
+        string[] names = tickers.text.Split('\n');
+
+        for(int i=0;i<pointCount;i++){
             //make and position points
             GameObject obj = Instantiate(pointPrefab, transform);
-            obj.transform.position = Vector3.Scale(point, pointRange);
+            obj.transform.position = Vector3.Scale(points[i], pointRange);
+            obj.GetComponent<SimpleBillboard>().targetTransform = headTransform;
+
+            //give random sector and company name
+            obj.GetComponent<PointHoverGlow>().baseColor = sectorColors.colors[
+                Mathf.FloorToInt(Random.Range(0,sectorColors.colors.Length))];
+
+            obj.GetComponentInChildren<TextMeshPro>().text = names[i % names.Length];
         }
+
+
         foreach((int,int) edge in edges){
             //make and position edges
             LineRenderer line = Instantiate(edgePrefab, transform).GetComponent<LineRenderer>();
