@@ -56,6 +56,8 @@ public class RandomScatterPlotter : MonoBehaviour
 
         string[] names = tickers.text.Split('\n');
 
+        ScaleNegator scaler = GetComponent<ScaleNegator>();
+
         for(int i=0;i<pointCount;i++){
             //make and position points
             GameObject obj = Instantiate(pointPrefab, transform);
@@ -68,6 +70,8 @@ public class RandomScatterPlotter : MonoBehaviour
                 Mathf.FloorToInt(Random.Range(0,sectorColors.colors.Length))];
 
             obj.GetComponentInChildren<TextMeshPro>().text = names[i % names.Length];
+
+            scaler.objectsToScale.Add(obj.transform);
         }
 
 
