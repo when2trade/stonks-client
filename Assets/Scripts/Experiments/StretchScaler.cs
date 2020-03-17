@@ -14,16 +14,22 @@ public class StretchScaler : MonoBehaviour
     [Range(0,1)]
     public float damping = 0.9f;
 
-    float velocity = 0;
+    public float moveScale = 1;
+
+    float scaleVelocity = 0;
+    Vector3 posVelocity = Vector3.zero;
     
     bool isActive = false;
     float oldDist;
     float startDist = 0;
     public float elasticShaderStretchFactor = 0.5f; //how much to alter the StretchAmount parameter
 
+    Vector3 oldPos;
+
     void Update()
     {
         float dist = (leftHand.position - rightHand.position).magnitude;
+        Vector3 centrePos = (leftHand.position + rightHand.position)/2f; //get centre point of controllers
 
         bool triggersDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > threshold
                 && Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > threshold;
@@ -32,6 +38,7 @@ public class StretchScaler : MonoBehaviour
             isActive = true;
             oldDist = dist;
             startDist = dist;
+            oldPos = centrePos;
             scaleIndicatorLine.gameObject.SetActive(true);
         }
         if(isActive){
@@ -40,18 +47,26 @@ public class StretchScaler : MonoBehaviour
                 scaleIndicatorLine.gameObject.SetActive(false);
             }
             else{
-                velocity = dist - oldDist;
+                scaleVelocity = dist - oldDist;
+                posVelocity = centrePos - oldPos;
                 scaleIndicatorLine.SetPosition(0, leftHand.position);
                 scaleIndicatorLine.SetPosition(1, rightHand.position);
                 scaleIndicatorLine.material.SetFloat("_StretchAmount",(dist - startDist) * elasticShaderStretchFactor+0.5f);
                 oldDist = dist;
+                oldPos = centrePos;
             }
         }
 
-        velocity*=damping;
-        float scaleFactor = 1+velocity;
+        scaleVelocity *= damping;
+        posVelocity *= damping;
+
+        //scale around the controller centre 
+        float scaleFactor = 1 + scaleVelocity;
         transform.localScale *= scaleFactor;
-        Vector3 scalePoint = (leftHand.position + rightHand.position)/2;
-        transform.position = (transform.position - scalePoint)*scaleFactor + scalePoint;
+        transform.position = (transform.position - centrePos)*scaleFactor + centrePos;
+
+        //position
+        transform.position += posVelocity * moveScale;
+
     }
 }
