@@ -63,7 +63,7 @@ public class RandomScatterPlotter : MonoBehaviour
             obj.GetComponent<SimpleBillboard>().targetTransform = headTransform;
 
             //give random sector and company name
-            obj.GetComponent<PointHoverGlow>().baseColor = sectorColors.colors[
+            obj.GetComponent<SpriteRenderer>().color = sectorColors.colors[
                 Mathf.FloorToInt(Random.Range(0,sectorColors.colors.Length))];
 
             obj.GetComponentInChildren<TextMeshPro>().text = names[i % names.Length];
