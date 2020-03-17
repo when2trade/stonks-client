@@ -18,6 +18,8 @@ public class StretchScaler : MonoBehaviour
     
     bool isActive = false;
     float oldDist;
+    float startDist = 0;
+    public float elasticShaderStretchFactor = 0.5f; //how much to alter the StretchAmount parameter
 
     void Update()
     {
@@ -29,6 +31,7 @@ public class StretchScaler : MonoBehaviour
         if(!isActive && triggersDown){
             isActive = true;
             oldDist = dist;
+            startDist = dist;
             scaleIndicatorLine.gameObject.SetActive(true);
         }
         if(isActive){
@@ -40,6 +43,7 @@ public class StretchScaler : MonoBehaviour
                 velocity = dist - oldDist;
                 scaleIndicatorLine.SetPosition(0, leftHand.position);
                 scaleIndicatorLine.SetPosition(1, rightHand.position);
+                scaleIndicatorLine.material.SetFloat("_StretchAmount",(dist - startDist) * elasticShaderStretchFactor+0.5f);
                 oldDist = dist;
             }
         }

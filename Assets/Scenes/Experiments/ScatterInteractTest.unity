@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 1301961235}
   - component: {fileID: 1301961234}
   m_Layer: 0
-  m_Name: Scaling Dashed Line
+  m_Name: Scaling Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -513,7 +513,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5d97ed4132edcfe48a6938e82b0cb94a, type: 2}
+  - {fileID: 2100000, guid: 402b955aaa73cfe4a9d9a48c147a4eec, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -587,7 +587,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 1
+    textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -704,6 +704,7 @@ MonoBehaviour:
   scaleIndicatorLine: {fileID: 1301961234}
   threshold: 0.5
   damping: 0.9
+  elasticShaderStretchFactor: 1
 --- !u!4 &1700928757 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3218359327727092946, guid: 1da023bcbc4d36a4091e1bfd7b21b8b5,
