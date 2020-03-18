@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4976483872876790624}
   - component: {fileID: 6596386001694916072}
   - component: {fileID: 6278036864873388188}
+  - component: {fileID: -136858825764633687}
+  - component: {fileID: 7870597637747703400}
   m_Layer: 0
   m_Name: PlotPoint
   m_TagString: Untagged
@@ -60,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45c4a2edab7d9b84d862af1dba91e84b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTransform: {fileID: 0}
+  referenceTransform: {fileID: 0}
 --- !u!212 &6596386001694916072
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -122,10 +124,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d81a6cd78ce954a8b8c8323982f7ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetBehaviour: {fileID: 494233086276675395}
   referenceTransform: {fileID: 0}
+  targetBehaviour: {fileID: 494233086276675395}
   minDist: 0
   maxDist: 2
+--- !u!114 &-136858825764633687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790734462513249548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 677d19f255cb0e244babed2b2633981d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  referenceTransform: {fileID: 0}
+  nearFadeStart: 0.25
+  nearFadeEnd: 0.15
+  farFadeStart: 3
+  farFadeEnd: 6
+  sprite: {fileID: 6596386001694916072}
+--- !u!114 &7870597637747703400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790734462513249548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0919f4b647d698249a4cad045eb8f6fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7284839384586038211
 GameObject:
   m_ObjectHideFlags: 0
