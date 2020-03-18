@@ -14,6 +14,8 @@ public class GuardianBoundaryQuadPlacer : MonoBehaviour
 
     public Transform quadObject;
 
+    public MeshRenderer mesh;
+
     Vector2 baseTextureScale; //original texture scale.
 
     Material mat;
@@ -21,7 +23,7 @@ public class GuardianBoundaryQuadPlacer : MonoBehaviour
     void Start()
     {
         m_enforcer.TrackingChanged += RefreshDisplay;
-        mat = GetComponent<MeshRenderer>().material;
+        mat = mesh.material;
         baseTextureScale = mat.mainTextureScale;
         RefreshDisplay();
     }
@@ -40,7 +42,7 @@ public class GuardianBoundaryQuadPlacer : MonoBehaviour
         Vector3 center = (points[0]+points[1]+points[2]+points[3])/4f;
         quadObject.position = center;
         quadObject.rotation = Quaternion.LookRotation(points[1]-points[0], Vector3.up);
-        mat.mainTextureScale = Vector2.Scale(baseTextureScale, new Vector2(width,length));
+        mat.mainTextureScale = Vector2.Scale(baseTextureScale, new Vector2(length, width));
       }
     }
 }
