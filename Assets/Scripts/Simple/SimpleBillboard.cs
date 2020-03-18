@@ -5,12 +5,10 @@ using UnityEngine;
 /// <summary>
 /// Spins an object to always face a given target.
 /// </summary>
-public class SimpleBillboard : MonoBehaviour
-{
-    public Transform targetTransform;
-    
+public class SimpleBillboard : SimpleTransformInfluenced
+{    
     void Update()
     {
-        transform.LookAt(targetTransform);
+        transform.LookAt(referenceTransform);
     }
 }

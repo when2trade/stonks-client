@@ -62,8 +62,8 @@ public class RandomScatterPlotter : MonoBehaviour
             //make and position points
             GameObject obj = Instantiate(pointPrefab, transform);
             obj.transform.localPosition = Vector3.Scale(points[i], pointRange);
-            obj.GetComponent<SimpleBillboard>().targetTransform = headTransform;
-            obj.GetComponent<SimpleDistanceHider>().referenceTransform = headTransform;
+
+            obj.GetComponent<PlotPoint>().SetHeadTransform(headTransform);
 
             //give random sector and company name
             obj.GetComponent<SpriteRenderer>().color = sectorColors.colors[
