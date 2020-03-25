@@ -25,12 +25,12 @@ public class ServerFetch : MonoBehaviour{
     //Debug.Log(serverAddress);
   }
 
-  public void GetJsonObject(string request, Action<dynamic> callback)
+  public void GetJsonObject<T>(string request, Action<T> callback)
   {
-    StartCoroutine(GetRequest(serverAddress+request, callback));
+    StartCoroutine(GetRequest<T>(serverAddress+request, callback));
   }
 
-  private IEnumerator GetRequest(string uri,  Action<dynamic> callback)
+  private IEnumerator GetRequest<T>(string uri,  Action<T> callback)
   {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -38,12 +38,18 @@ public class ServerFetch : MonoBehaviour{
 
             if (webRequest.isNetworkError)
             {
-                Debug.LogError(uri + ": Error: " + webRequest.error);
+              Debug.LogError(uri + ": Error: " + webRequest.error);
             }
             else
             {
-                dynamic jsonObject = JsonConvert.DeserializeObject(webRequest.downloadHandler.text);
-                callback(jsonObject);
+                //Debug.Log(webRequest.downloadHandler.text);
+                try{
+                  T jsonObject = JsonConvert.DeserializeObject<T>(webRequest.downloadHandler.text);
+                  callback(jsonObject);
+                }
+                catch(JsonReaderException e){
+                    Debug.LogError(uri + ": JSON can't be parsed! " + webRequest.downloadHandler.text);
+                }
             }
         }
     }
