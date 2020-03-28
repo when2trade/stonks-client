@@ -14,7 +14,7 @@ public class PointHoverGlow : MonoBehaviour
     void Start()
     {
         spr = GetComponent<SpriteRenderer>();
-        spr.color = baseColor;
+        baseColor = spr.color;
     }
 
     public void HoverEnter(){
