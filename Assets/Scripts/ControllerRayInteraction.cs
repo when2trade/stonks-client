@@ -17,7 +17,8 @@ public class ControllerRayInteraction : MonoBehaviour
     public Gradient lineGradientMiss, lineGradientHit;
 
     [Range(0,1)]
-    public float pressThreshold = 0.8f; //what should we consider a press?
+    public float pressThreshold = 0.5f; //what should we consider a press?
+    public float maxControllerMove = 0.1f; //how much movement is allowed before we consider this a drag?
 
     Vector3[] posesL = {Vector3.zero, Vector3.zero};
     Vector3[] posesR = {Vector3.zero, Vector3.zero};
@@ -25,6 +26,9 @@ public class ControllerRayInteraction : MonoBehaviour
     Transform oldHoverL, oldHoverR;
 
     bool wasLDown = false, wasRDown = false;
+
+    Vector3 oldPosL, oldPosR;
+    float distTravelledL = 0, distTravelledR = 0;
 
     void LateUpdate() //(late cause we want to let the controllers move first!)
     {
@@ -41,14 +45,36 @@ public class ControllerRayInteraction : MonoBehaviour
         lineL.SetPositions(posesL);
         lineR.SetPositions(posesR);
 
-        if(!lDown && wasLDown && oldHoverL !=null){ //release L and something's over the left ray
-            oldHoverL.GetComponent<Clickable>()?.Click();
+        //if trigger released, something's over the ray, and controller hasn't moved too far, treat as click
+        if(!lDown && wasLDown){
+            lineL.enabled = true;
+            if(oldHoverL != null && distTravelledL < maxControllerMove)
+                oldHoverL.GetComponent<Clickable>()?.Click();
         }
-        if(!rDown && wasRDown && oldHoverR !=null){ //release R and something's over the right ray
-            oldHoverR.GetComponent<Clickable>()?.Click();
+        if(!rDown && wasRDown){
+            lineR.enabled = true;
+            if(oldHoverR != null && distTravelledR < maxControllerMove)
+                oldHoverR.GetComponent<Clickable>()?.Click();
         }
 
+        if(lDown){
+            distTravelledL += (rayAnchorL.position - oldPosL).magnitude;
+            if(!wasLDown) distTravelledL = 0;
+
+            if(distTravelledL > maxControllerMove)
+                lineL.enabled = false;
+        }
+
+        if(rDown){
+            distTravelledR += (rayAnchorR.position - oldPosR).magnitude;
+            if(!wasRDown) distTravelledR = 0;
+
+            if(distTravelledR > maxControllerMove)
+                lineR.enabled = false;
+        }
+        
         wasLDown = lDown; wasRDown = rDown;
+        oldPosL = rayAnchorL.position; oldPosR = rayAnchorR.position;
     }
 
     //does raycasts & sends hover events.
