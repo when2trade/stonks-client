@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using TMPro;
 
 /// <summary>
 /// Makes a random 3D scatter plot, used in the ScatterIneractTest experiment.
@@ -63,13 +62,11 @@ public class RandomScatterPlotter : MonoBehaviour
             GameObject obj = Instantiate(pointPrefab, transform);
             obj.transform.localPosition = Vector3.Scale(points[i], pointRange);
 
-            obj.GetComponent<PlotPoint>().SetHeadTransform(headTransform);
+            obj.GetComponent<PlotPoint>().SetupPoint(headTransform, names[i % names.Length]);
 
             //give random sector and company name
             obj.GetComponent<SpriteRenderer>().color = sectorColors.colors[
                 Mathf.FloorToInt(Random.Range(0,sectorColors.colors.Length))];
-
-            obj.GetComponentInChildren<TextMeshPro>().text = names[i % names.Length];
 
             scaler.objectsToScale.Add(obj.transform);
         }
