@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Scales this object when both controllers are pressed and 'stretched'.
+/// Also updates position and rotation now (with one controller pressed) because who needs separation of concerns anyway
+/// </summary>
 public class StretchScaler : MonoBehaviour
 {
     public Transform leftHand, rightHand;
@@ -9,7 +13,7 @@ public class StretchScaler : MonoBehaviour
     public LineRenderer scaleIndicatorLine;
 
     [Range(0,1)]
-    public float threshold = 0.5f; //what should we consider a press?
+    public float pressThreshold = 0.5f; //what should we consider a press?
 
     [Range(0,1)]
     public float damping = 0.9f;
@@ -28,6 +32,8 @@ public class StretchScaler : MonoBehaviour
     float startDist = 0;
     public float elasticShaderStretchFactor = 0.5f; //how much to alter the StretchAmount parameter
 
+    public float elasticStartOffset = 0.03f; //how mush should we offset the start of the elastic, so it doesn't pass through the controllers
+
     Vector3 oldPos, oldHandVec;
     Quaternion startRot;
 
@@ -38,8 +44,8 @@ public class StretchScaler : MonoBehaviour
         float dist = handVec.magnitude;
         Vector3 centrePos = (lPos + rPos)/2f; //get centre point of controllers
 
-        bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > threshold;
-        bool rDown = Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > threshold;
+        bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > pressThreshold;
+        bool rDown = Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > pressThreshold;
         bool bothDown = lDown && rDown;
 
         if(bothDown){
@@ -56,8 +62,9 @@ public class StretchScaler : MonoBehaviour
                 scaleVelocity = dist - oldDist;
                 rotVelocity = Quaternion.FromToRotation(oldHandVec, handVec);
 
-                scaleIndicatorLine.SetPosition(0, lPos);
-                scaleIndicatorLine.SetPosition(1, rPos);
+                scaleIndicatorLine.SetPosition(0, lPos + (rPos-lPos).normalized*elasticStartOffset);
+                scaleIndicatorLine.SetPosition(1, rPos + (lPos-rPos).normalized*elasticStartOffset);
+
                 scaleIndicatorLine.material.SetFloat("_StretchAmount",(dist - startDist) * elasticShaderStretchFactor+0.5f);
 
                 oldDist = dist;

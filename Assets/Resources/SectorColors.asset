@@ -34,3 +34,7 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0.75850105, a: 1}
   - {r: 0.48299998, g: 0.30718797, b: 0.35415614, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
+  weakPositiveColor: {r: 0.6448024, g: 0.8490566, b: 0.68905747, a: 1}
+  strongPositiveColor: {r: 0, g: 1, b: 0, a: 1}
+  weakNegativeColor: {r: 0.7924528, g: 0.6167675, b: 0.6167675, a: 1}
+  strongNegativeColor: {r: 1, g: 0, b: 0, a: 1}

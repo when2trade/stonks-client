@@ -10,9 +10,11 @@ public class SimpleBillboardDampened : SimpleTransformInfluenced
     [Range(0,1)]
     public float rotateDamping = 0.9f;
 
+    public Vector3 offset = Vector3.zero; 
+
     void Update()
     {
-      Vector3 dir = referenceTransform.position - transform.position;
+      Vector3 dir = referenceTransform.position - transform.position - offset;
       transform.rotation = Quaternion.Lerp( 
         Quaternion.LookRotation(dir, Vector3.up),
         transform.rotation,
@@ -20,7 +22,7 @@ public class SimpleBillboardDampened : SimpleTransformInfluenced
     }
 
     public void SnapToDesiredRotation(){
-      Vector3 dir = referenceTransform.position - transform.position;
+      Vector3 dir = referenceTransform.position - transform.position - offset;
       transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
     }
 }
