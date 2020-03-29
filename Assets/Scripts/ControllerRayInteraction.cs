@@ -37,17 +37,16 @@ public class ControllerRayInteraction : MonoBehaviour
         posesL[1] = UpdateRay(rayAnchorL, lineL, ref oldHoverL);
         posesR[1] = UpdateRay(rayAnchorR, lineR, ref oldHoverR);
 
-        if(lDown && !wasLDown && oldHoverL !=null){ //press L and something's over the left ray
-            oldHoverL.GetComponent<PlotPoint>()?.Click();
-        }
-        if(rDown && !wasRDown && oldHoverR !=null){ //press R and something's over the right ray
-            oldHoverR.GetComponent<PlotPoint>()?.Click();
-        }
-
-
         //reposition rays
         lineL.SetPositions(posesL);
         lineR.SetPositions(posesR);
+
+        if(!lDown && wasLDown && oldHoverL !=null){ //release L and something's over the left ray
+            oldHoverL.GetComponent<Clickable>()?.Click();
+        }
+        if(!rDown && wasRDown && oldHoverR !=null){ //release R and something's over the right ray
+            oldHoverR.GetComponent<Clickable>()?.Click();
+        }
 
         wasLDown = lDown; wasRDown = rDown;
     }

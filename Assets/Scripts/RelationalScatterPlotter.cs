@@ -72,10 +72,20 @@ public class RelationalScatterPlotter : MonoBehaviour
 
         
         foreach((int,int) edge in edges){
+            Vector3 p1 = Vector3.Scale(points[edge.Item1], pointRange), 
+              p2 = Vector3.Scale(points[edge.Item2], pointRange);
+            Vector3 vec = (p2-p1);
+
             //make and position edges
-            LineRenderer line = Instantiate(edgePrefab, transform).GetComponent<LineRenderer>();
-            line.SetPositions(new Vector3[]{Vector3.Scale(points[edge.Item1], pointRange),
-                Vector3.Scale(points[edge.Item2], pointRange)});
+            Transform obj = Instantiate(edgePrefab, transform).transform;
+            obj.localPosition = p1;
+            obj.localRotation = Quaternion.LookRotation(vec, Vector3.up);
+            obj.localScale = new Vector3(1,1, vec.magnitude);
+
+            LineRenderer line = obj.GetComponent<LineRenderer>();
+
+            //line.SetPositions(new Vector3[]{Vector3.Scale(points[edge.Item1], pointRange),
+            //    Vector3.Scale(points[edge.Item2], pointRange)});
 
             if(Random.value > 0.5f) //colour green or red
                 //linear interpolation between weak and strong correlation colours

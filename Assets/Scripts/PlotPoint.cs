@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class PlotPoint : MonoBehaviour
+public class PlotPoint : Clickable
 {
     public string symbol;
     public bool canvasOpen = false;
@@ -16,7 +16,7 @@ public class PlotPoint : MonoBehaviour
         this.symbol = symbol;
     }
 
-    public void Click(){
+    public override void Click(){
         if(canvasOpen) InfoPanelController.singleton.ClosePointPanel(this);
         else InfoPanelController.singleton.OpenPointPanel(this);
         canvasOpen = !canvasOpen;
