@@ -9,6 +9,7 @@ public class Dataset : MonoBehaviour{
   //public static Dataset singleton { get { return singletonInstance; } }
 
   public static Dictionary<string, string> nameMap, categoryMap;
+  public static string finnhubAPIKey;
 
   void Awake(){
     if (singletonInstance != null && singletonInstance != this){
@@ -20,6 +21,7 @@ public class Dataset : MonoBehaviour{
 
     nameMap = ParseTwoColumnTSV("Data/symbolToName");
     categoryMap = ParseTwoColumnTSV("Data/symbolToCategory");
+    finnhubAPIKey = Resources.Load<TextAsset>("Data/finnhubKey").text;
   }
   
   /// <summary>

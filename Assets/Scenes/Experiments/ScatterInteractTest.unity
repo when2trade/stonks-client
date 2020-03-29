@@ -1289,6 +1289,7 @@ GameObject:
   - component: {fileID: 1374257615}
   - component: {fileID: 1374257618}
   - component: {fileID: 1374257619}
+  - component: {fileID: 1374257617}
   m_Layer: 0
   m_Name: Server & Utilities
   m_TagString: Untagged
@@ -1322,6 +1323,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1374257617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374257614}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f84ee1f5061cd7740bc07061285db338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1374257618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1461,6 +1474,7 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   pressThreshold: 0.5
+  maxControllerMove: 0.03
 --- !u!1 &1597009762
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,10 +1554,6 @@ MonoBehaviour:
   pointCount: 500
   pointRange: {x: 2, y: 2, z: 2}
   edgeThreshold: 0.15
-  weakPositiveColor: {r: 0.6448024, g: 0.8490566, b: 0.68905747, a: 1}
-  strongPositiveColor: {r: 0.11199999, g: 1, b: 0.18732102, a: 1}
-  weakNegativeColor: {r: 0.7924528, g: 0.6167675, b: 0.6167675, a: 1}
-  strongNegativeColor: {r: 1, g: 0, b: 0, a: 1}
   sectorColors: {fileID: 11400000, guid: 5e946ca34fc6d78418edd5ceb5a7f8be, type: 2}
   headTransform: {fileID: 1144804775}
 --- !u!114 &1597009766

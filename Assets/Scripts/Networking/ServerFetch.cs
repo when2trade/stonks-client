@@ -12,9 +12,9 @@ public class ServerFetch : MonoBehaviour{
   private static ServerFetch singletonInstance;
   public static ServerFetch singleton { get { return singletonInstance; } }
 
-  string serverAddress = "";
+  public static string serverAddress = "";
 
-  public void Awake(){
+  void Awake(){
     if (singletonInstance != null && singletonInstance != this){
         Destroy(this);
         return;
@@ -27,7 +27,13 @@ public class ServerFetch : MonoBehaviour{
 
   public void GetJsonObject<T>(string request, Action<T> callback)
   {
-    StartCoroutine(GetRequest<T>(serverAddress+request, callback));
+    StartCoroutine(GetRequest<T>(request, callback));
+  }
+
+  public void GetStockData(string symbol,  Action<DataCandle> callback, string resolution = "D", int count=30){
+    string url = "https://finnhub.io/api/v1/stock/candle?symbol="
+     + symbol + "&resolution=" + resolution + "&count="+count+"&token="+Dataset.finnhubAPIKey;
+    StartCoroutine(GetRequest<DataCandle>(url, callback));
   }
 
   private IEnumerator GetRequest<T>(string uri,  Action<T> callback)
