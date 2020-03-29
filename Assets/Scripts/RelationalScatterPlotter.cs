@@ -17,10 +17,6 @@ public class RelationalScatterPlotter : MonoBehaviour
     [Range(0,1)]
     public float edgeThreshold = 0.1f; //how liberally should we make edges?
 
-    //edge colours
-    public Color weakPositiveColor = Color.white, strongPositiveColor = Color.green, 
-        weakNegativeColor = Color.white, strongNegativeColor = Color.red;
-
     public SectorColorScheme sectorColors;
     
     public Transform headTransform; //reference to head for billboarding
@@ -54,7 +50,9 @@ public class RelationalScatterPlotter : MonoBehaviour
 
         ScaleNegator scaler = GetComponent<ScaleNegator>();
 
-        var p=0;
+        var syms = new List<string>();
+
+        int p=0;
         foreach(var symbolCatPair in Dataset.categoryMap){
             //make and position points
             GameObject obj = Instantiate(pointPrefab, transform);
@@ -66,10 +64,13 @@ public class RelationalScatterPlotter : MonoBehaviour
             obj.GetComponent<SpriteRenderer>().color = sectorColors.ColorOfCategory(symbolCatPair.Value);
 
             scaler.objectsToScale.Add(obj.transform);
-          p+=1;
-          if(p==pointCount) break;
-        }
 
+            syms.Add(symbolCatPair.Key);
+            
+            p+=1;
+            if(p==pointCount) break;
+        }
+        Debug.Log(syms.Count);
         
         foreach((int,int) edge in edges){
             Vector3 p1 = Vector3.Scale(points[edge.Item1], pointRange), 
@@ -78,20 +79,11 @@ public class RelationalScatterPlotter : MonoBehaviour
 
             //make and position edges
             Transform obj = Instantiate(edgePrefab, transform).transform;
-            obj.localPosition = p1;
+            obj.localPosition = (p1+p2)/2.0f;
             obj.localRotation = Quaternion.LookRotation(vec, Vector3.up);
             obj.localScale = new Vector3(1,1, vec.magnitude);
 
-            LineRenderer line = obj.GetComponent<LineRenderer>();
-
-            //line.SetPositions(new Vector3[]{Vector3.Scale(points[edge.Item1], pointRange),
-            //    Vector3.Scale(points[edge.Item2], pointRange)});
-
-            if(Random.value > 0.5f) //colour green or red
-                //linear interpolation between weak and strong correlation colours
-                line.startColor = line.endColor = Color.Lerp(weakPositiveColor, strongPositiveColor, Random.value);
-            else
-                line.startColor = line.endColor = Color.Lerp(weakNegativeColor, strongNegativeColor, Random.value);
+            obj.GetComponent<PlotEdge>().SetupEdge(syms[edge.Item1], syms[edge.Item2], Random.value*2f-1f);
         }
     }
 

@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 6482770469729596593}
   - component: {fileID: 6482770469729596590}
   m_Layer: 5
-  m_Name: Text
+  m_Name: NAME
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.54509807}
+  m_Color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 0.8}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -252,7 +252,7 @@ GameObject:
   - component: {fileID: 6482770470557687050}
   - component: {fileID: 6482770470557687051}
   m_Layer: 5
-  m_Name: StockDataCanvas
+  m_Name: CANVAS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -419,3 +419,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   referenceTransform: {fileID: 0}
   rotateDamping: 0.85
+  offset: {x: 0.362, y: -0.159, z: 0}
