@@ -11,5 +11,6 @@ public class PlotEdge : MonoBehaviour
     public void Click(){
         if(canvasOpen) InfoPanelController.singleton.CloseEdgePanel(this);
         else InfoPanelController.singleton.OpenEdgePanel(this);
+        canvasOpen = !canvasOpen;
     }
 }

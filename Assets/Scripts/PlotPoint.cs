@@ -19,5 +19,6 @@ public class PlotPoint : MonoBehaviour
     public void Click(){
         if(canvasOpen) InfoPanelController.singleton.ClosePointPanel(this);
         else InfoPanelController.singleton.OpenPointPanel(this);
+        canvasOpen = !canvasOpen;
     }
 }

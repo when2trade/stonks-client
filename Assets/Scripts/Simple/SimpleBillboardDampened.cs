@@ -18,4 +18,9 @@ public class SimpleBillboardDampened : SimpleTransformInfluenced
         transform.rotation,
         rotateDamping);
     }
+
+    public void SnapToDesiredRotation(){
+      Vector3 dir = referenceTransform.position - transform.position;
+      transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+    }
 }

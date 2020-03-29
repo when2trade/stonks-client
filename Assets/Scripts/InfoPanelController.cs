@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class InfoPanelController : MonoBehaviour{
   private static InfoPanelController singletonInstance;
@@ -21,8 +22,8 @@ public class InfoPanelController : MonoBehaviour{
   //define a pool of 2 point panels and 2 edge panels
   List<GameObject> pointPanelPool, edgePanelPool;
 
-  Dictionary<PlotPoint, GameObject> pointPanelsInUse = new Dictionary<PlotPoint, GameObject>(), 
-    edgePanelsInUse = new Dictionary<PlotPoint, GameObject>();
+  Dictionary<PlotPoint, GameObject> pointPanelsInUse = new Dictionary<PlotPoint, GameObject>();
+  Dictionary<PlotEdge, GameObject> edgePanelsInUse = new Dictionary<PlotEdge, GameObject>();
 
   void Start(){
     pointPanelPool = new List<GameObject>{
@@ -34,16 +35,18 @@ public class InfoPanelController : MonoBehaviour{
   }
 
   void CloseAllPanels(){
-    foreach(var entry in pointPanelsInUse){
-      entry.Value.transform.GetChild(0).GetComponent<Animation>().Play("StockWorldCanvasClose");
-      pointPanelPool.Add(entry.Value);
-      pointPanelsInUse.Remove(entry.Key);
+    foreach(var key in new List<PlotPoint>(pointPanelsInUse.Keys)){ //new list is important to make a copy of .Keys, so we're not removing on the fly and triggering an exception!
+      pointPanelsInUse[key].transform.GetChild(0).GetComponent<Animation>().Play("StockWorldCanvasClose");
+      pointPanelPool.Add(pointPanelsInUse[key]);
+      pointPanelsInUse.Remove(key);
+      key.canvasOpen = false;
     }
 
-    foreach(var entry in edgePanelsInUse){
-      //entry.Value.transform.GetChild(0).GetComponent<Animation>().Play("StockWorldCanvasClose"); //????
-      edgePanelPool.Add(entry.Value);
-      edgePanelsInUse.Remove(entry.Key);
+    foreach(var key in new List<PlotEdge>(edgePanelsInUse.Keys)){
+      //edgePanelsInUse[key].transform.GetChild(0).GetComponent<Animation>().Play("StockWorldCanvasClose");
+      edgePanelPool.Add(edgePanelsInUse[key]);
+      edgePanelsInUse.Remove(key);
+      key.canvasOpen = false;
     }
   }
 
@@ -57,8 +60,10 @@ public class InfoPanelController : MonoBehaviour{
     CloseAllPanels();
     //get an unused point panel, lock it on and play anim
     GameObject go = Dequeue(pointPanelPool);
+    go.SetActive(true);
     go.GetComponent<SimpleLockOnto>().referenceTransform = point.transform;
     go.GetComponent<SimpleBillboardDampened>().referenceTransform = cameraAnchor;
+    go.GetComponent<SimpleBillboardDampened>().SnapToDesiredRotation(); //so it doesn't spin around on first hit
     go.transform.GetChild(0).GetComponent<Animation>().Play("StockWorldCanvasOpen");
     pointPanelsInUse.Add(point, go);
   }
@@ -72,6 +77,7 @@ public class InfoPanelController : MonoBehaviour{
     pointPanelsInUse[point].transform.GetChild(0).GetComponent<Animation>().Play("StockWorldCanvasClose");
     pointPanelPool.Add(pointPanelsInUse[point]);
     pointPanelsInUse.Remove(point);
+    
   }
 
   public void CloseEdgePanel(PlotEdge edge){
