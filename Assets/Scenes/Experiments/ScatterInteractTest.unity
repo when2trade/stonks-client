@@ -325,6 +325,10 @@ PrefabInstance:
       propertyPath: expandMixedRealityCapturePropertySheet
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 8a1dd6bbc4ee3ce478d6bae29c7060ea, type: 3}
+      propertyPath: useRecommendedMSAALevel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3821496316382133870, guid: 8a1dd6bbc4ee3ce478d6bae29c7060ea,
         type: 3}
       propertyPath: m_IsActive
@@ -1283,7 +1287,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1374257616}
   - component: {fileID: 1374257615}
-  - component: {fileID: 1374257617}
   - component: {fileID: 1374257618}
   - component: {fileID: 1374257619}
   m_Layer: 0
@@ -1319,18 +1322,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1374257617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374257614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ee1f5061cd7740bc07061285db338, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1374257618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1340,7 +1331,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1374257614}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51a41622d0e0f724f8745c1479f1ac29, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a9ffc7c67476a646886b685aa7b6a3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1374257619
@@ -1357,7 +1348,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointPanelPrefab: {fileID: 6482770470974770516, guid: 82770e2309862a74aa4612fe7177fabe,
     type: 3}
-  edgePanelPrefab: {fileID: 0}
+  edgePanelPrefab: {fileID: 6482770470974770516, guid: e7f3ea2d0b2a285478d774b89e784c64,
+    type: 3}
   cameraAnchor: {fileID: 1144804775}
 --- !u!1 &1513765476
 GameObject:
@@ -1481,6 +1473,7 @@ GameObject:
   - component: {fileID: 1597009763}
   - component: {fileID: 1597009766}
   - component: {fileID: 1597009767}
+  - component: {fileID: 1597009765}
   m_Layer: 0
   m_Name: scatter plot
   m_TagString: Untagged
@@ -1495,7 +1488,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1597009762}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc915f4c8668a104886fc2d3dcdf8f77, type: 3}
   m_Name: 
@@ -1528,6 +1521,31 @@ Transform:
   m_Father: {fileID: 1625185029}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1597009765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597009762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13e7df251185655408a4cfc0c6d3cb9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointPrefab: {fileID: 1790734462513249548, guid: 8cf8b6a9988297144ba3ab7d9a0617e9,
+    type: 3}
+  edgePrefab: {fileID: 243824889851728759, guid: 22a0b622fb8b18c49a9cf77e1001b0b3,
+    type: 3}
+  pointCount: 500
+  pointRange: {x: 2, y: 2, z: 2}
+  edgeThreshold: 0.15
+  weakPositiveColor: {r: 0.6448024, g: 0.8490566, b: 0.68905747, a: 1}
+  strongPositiveColor: {r: 0.11199999, g: 1, b: 0.18732102, a: 1}
+  weakNegativeColor: {r: 0.7924528, g: 0.6167675, b: 0.6167675, a: 1}
+  strongNegativeColor: {r: 1, g: 0, b: 0, a: 1}
+  sectorColors: {fileID: 11400000, guid: 5e946ca34fc6d78418edd5ceb5a7f8be, type: 2}
+  headTransform: {fileID: 1144804775}
 --- !u!114 &1597009766
 MonoBehaviour:
   m_ObjectHideFlags: 0
