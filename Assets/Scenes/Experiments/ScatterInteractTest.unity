@@ -1484,7 +1484,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1597009764}
-  - component: {fileID: 1597009763}
   - component: {fileID: 1597009766}
   - component: {fileID: 1597009767}
   - component: {fileID: 1597009765}
@@ -1495,32 +1494,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1597009763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1597009762}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc915f4c8668a104886fc2d3dcdf8f77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointPrefab: {fileID: 1790734462513249548, guid: 8cf8b6a9988297144ba3ab7d9a0617e9,
-    type: 3}
-  edgePrefab: {fileID: 243824889851728759, guid: 22a0b622fb8b18c49a9cf77e1001b0b3,
-    type: 3}
-  pointCount: 500
-  pointRange: {x: 2, y: 2, z: 2}
-  edgeThreshold: 0.15
-  weakPositiveColor: {r: 0.6448024, g: 0.8490566, b: 0.68905747, a: 1}
-  strongPositiveColor: {r: 0.11199999, g: 1, b: 0.18732102, a: 1}
-  weakNegativeColor: {r: 0.7924528, g: 0.6167675, b: 0.6167675, a: 1}
-  strongNegativeColor: {r: 1, g: 0.09099996, b: 0.09099996, a: 1}
-  sectorColors: {fileID: 11400000, guid: 5e946ca34fc6d78418edd5ceb5a7f8be, type: 2}
-  headTransform: {fileID: 1144804775}
-  tickers: {fileID: 4900000, guid: be08cedb11d5be9479486fd0d4355b78, type: 3}
 --- !u!4 &1597009764
 Transform:
   m_ObjectHideFlags: 0
@@ -1552,8 +1525,9 @@ MonoBehaviour:
   edgePrefab: {fileID: 243824889851728759, guid: 22a0b622fb8b18c49a9cf77e1001b0b3,
     type: 3}
   pointCount: 500
-  pointRange: {x: 2, y: 2, z: 2}
-  edgeThreshold: 0.15
+  plotScaler: {x: 0.02, y: 0.02, z: 0.02}
+  minCorrelation: 0.4
+  maxCorrelation: 0.8
   sectorColors: {fileID: 11400000, guid: 5e946ca34fc6d78418edd5ceb5a7f8be, type: 2}
   headTransform: {fileID: 1144804775}
 --- !u!114 &1597009766
