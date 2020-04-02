@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 243824889851728756}
   - component: {fileID: 341399982730004894}
   - component: {fileID: 4284281429113508914}
+  - component: {fileID: 1239552080023268512}
   m_Layer: 0
   m_Name: PlotEdge
   m_TagString: Untagged
@@ -140,8 +141,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.02
-  m_Height: 0.9
+  m_Radius: 0.015
+  m_Height: 0.8
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4284281429113508914
@@ -161,3 +162,18 @@ MonoBehaviour:
   symbol2: 
   canvasOpen: 0
   colorScheme: {fileID: 11400000, guid: 5e946ca34fc6d78418edd5ceb5a7f8be, type: 2}
+--- !u!114 &1239552080023268512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243824889851728759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 803000bce59761a42a2647bf8656f83d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseColor: {r: 1, g: 0, b: 0, a: 1}
+  hoverColor: {r: 1, g: 1, b: 1, a: 1}
+  frames: 10

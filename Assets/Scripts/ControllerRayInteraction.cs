@@ -85,13 +85,10 @@ public class ControllerRayInteraction : MonoBehaviour
             line.colorGradient = lineGradientHit;
 
             if(hit.transform != oldHover){ //if this is a new object,
-                if(hit.transform.GetComponent<PlotPoint>()!=null){
-                    hit.transform.GetComponent<PointHoverGlow>().HoverEnter(); //do hover enter animation
-                }
+                hit.transform.GetComponent<PointHoverGlow>()?.HoverEnter(); //do hover enter animation (if applicable)
+                
                  if(oldHover!=null){ //if we were hovering over something else last frame,
-                    if(oldHover.GetComponent<PlotPoint>()!=null){
-                        oldHover.GetComponent<PointHoverGlow>().HoverExit(); //do hover exit animation
-                    }
+                   oldHover.GetComponent<PointHoverGlow>()?.HoverExit(); //do hover exit animation (if applicable)
                 }
             }
             oldHover = hit.transform;
@@ -101,9 +98,7 @@ public class ControllerRayInteraction : MonoBehaviour
             line.colorGradient = lineGradientMiss;
 
             if(oldHover!=null){ //if we were just hovering over something last frame,
-                if(oldHover.GetComponent<PlotPoint>()!=null){
-                    oldHover.GetComponent<PointHoverGlow>().HoverExit(); //do hover exit animation
-                }
+                oldHover.GetComponent<PointHoverGlow>()?.HoverExit(); //do hover exit animation (if applicable)
             }
             oldHover = null;
             return rayAnchor.position + rayAnchor.up * lineLength;

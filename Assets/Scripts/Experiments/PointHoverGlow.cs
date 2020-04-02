@@ -9,12 +9,15 @@ public class PointHoverGlow : MonoBehaviour
     public int frames = 10;
 
     SpriteRenderer spr;
+    LineRenderer line;
     Coroutine coroutine;
     
     void Start()
     {
         spr = GetComponent<SpriteRenderer>();
-        baseColor = spr.color;
+        line = GetComponent<LineRenderer>();
+        if(spr) baseColor =  spr.color;
+        if(line) baseColor =  line.startColor;
     }
 
     public void HoverEnter(){
@@ -31,10 +34,13 @@ public class PointHoverGlow : MonoBehaviour
     {
         for (int i=0;i<frames;i++) 
         {
-            spr.color = Color.Lerp(start,end, i/(float)frames);
+            Color c = Color.Lerp(start,end, i/(float)frames);
+            if(spr) spr.color = c;
+            if(line) line.startColor = line.endColor = c;
             yield return null;
         }
-        spr.color = end;
+        if(spr) spr.color = end;
+        if(line) line.startColor = line.endColor = end;
     }
 
 }
