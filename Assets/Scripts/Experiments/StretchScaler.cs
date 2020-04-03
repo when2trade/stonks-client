@@ -8,7 +8,19 @@ using UnityEngine;
 /// </summary>
 public class StretchScaler : MonoBehaviour
 {
-    public Transform leftHand, rightHand;
+    private static StretchScaler singletonInstance;
+    public static StretchScaler singleton { get { return singletonInstance; } }
+    void Awake(){
+        if (singletonInstance != null && singletonInstance != this){
+        Destroy(this);
+        return;
+        } else {
+        singletonInstance = this;
+        }
+    }
+
+
+    public Transform leftHand, rightHand, headAnchor;
 
     public LineRenderer scaleIndicatorLine;
 
@@ -37,81 +49,152 @@ public class StretchScaler : MonoBehaviour
     Vector3 oldPos, oldHandVec;
     Quaternion startRot;
 
+    bool inputAllowed = true;
+
     void Update()
     {
-        Vector3 lPos = leftHand.position, rPos = rightHand.position;
-        Vector3 handVec = lPos - rPos;
-        float dist = handVec.magnitude;
-        Vector3 centrePos = (lPos + rPos)/2f; //get centre point of controllers
+        if(inputAllowed){
+            Vector3 lPos = leftHand.position, rPos = rightHand.position;
+            Vector3 handVec = lPos - rPos;
+            float dist = handVec.magnitude;
+            Vector3 centrePos = (lPos + rPos)/2f; //get centre point of controllers
 
-        bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > pressThreshold;
-        bool rDown = Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > pressThreshold;
-        bool bothDown = lDown && rDown;
+            bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > pressThreshold;
+            bool rDown = Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > pressThreshold;
+            bool bothDown = lDown && rDown;
 
-        if(bothDown){
-            if(!wasBothDown){ //start stretch & rot
-                //isActive = true;
-                oldDist = dist;
-                startDist = dist;
+            if(bothDown){
+                if(!wasBothDown){ //start stretch & rot
+                    //isActive = true;
+                    oldDist = dist;
+                    startDist = dist;
 
-                oldHandVec = handVec;
-                startRot = transform.rotation;
-                scaleIndicatorLine.gameObject.SetActive(true);
+                    oldHandVec = handVec;
+                    startRot = transform.rotation;
+                    scaleIndicatorLine.gameObject.SetActive(true);
+                }
+                else{ //continue stretch & rot
+                    scaleVelocity = dist - oldDist;
+                    rotVelocity = Quaternion.FromToRotation(oldHandVec, handVec);
+
+                    scaleIndicatorLine.SetPosition(0, lPos + (rPos-lPos).normalized*elasticStartOffset);
+                    scaleIndicatorLine.SetPosition(1, rPos + (lPos-rPos).normalized*elasticStartOffset);
+
+                    scaleIndicatorLine.material.SetFloat("_StretchAmount",(dist - startDist) * elasticShaderStretchFactor+0.5f);
+
+                    oldDist = dist;
+                    oldHandVec = handVec;
+                }
             }
-            else{ //continue stretch & rot
-                scaleVelocity = dist - oldDist;
-                rotVelocity = Quaternion.FromToRotation(oldHandVec, handVec);
-
-                scaleIndicatorLine.SetPosition(0, lPos + (rPos-lPos).normalized*elasticStartOffset);
-                scaleIndicatorLine.SetPosition(1, rPos + (lPos-rPos).normalized*elasticStartOffset);
-
-                scaleIndicatorLine.material.SetFloat("_StretchAmount",(dist - startDist) * elasticShaderStretchFactor+0.5f);
-
-                oldDist = dist;
-                oldHandVec = handVec;
-            }
-        }
-        else{
-            if(wasBothDown){ //end stretch & rot
-                //isActive = false;
-                scaleIndicatorLine.gameObject.SetActive(false);
-                startRot = transform.rotation;
-            }
-            if(lDown){
-                if(!wasLDown || wasRDown){ //start grab on left hand
+            else{
+                if(wasBothDown){ //end stretch & rot
+                    //isActive = false;
+                    scaleIndicatorLine.gameObject.SetActive(false);
+                    startRot = transform.rotation;
+                }
+                if(lDown){
+                    if(!wasLDown || wasRDown){ //start grab on left hand
+                        oldPos = lPos;
+                    }
+                    posVelocity = lPos - oldPos;
                     oldPos = lPos;
                 }
-                posVelocity = lPos - oldPos;
-                oldPos = lPos;
-            }
-            else if(rDown){
-                if(!wasRDown || wasLDown){ //start grab on right hand
+                else if(rDown){
+                    if(!wasRDown || wasLDown){ //start grab on right hand
+                        oldPos = rPos;
+                    }
+                    posVelocity = rPos - oldPos;
                     oldPos = rPos;
                 }
-                posVelocity = rPos - oldPos;
-                oldPos = rPos;
             }
+
+            scaleVelocity *= damping;
+            posVelocity *= damping;
+            rotVelocity = Quaternion.Lerp(Quaternion.identity, rotVelocity, damping);
+
+            //scale around the controller centre 
+            float scaleFactor = 1 + scaleVelocity;
+            transform.localScale *= scaleFactor;
+            transform.position = (transform.position - centrePos)*scaleFactor + centrePos;
+
+            //position
+            transform.position += posVelocity * moveScale;
+
+            //rotation
+            //Quaternion finalRot = startRot* rotVelocity;
+            Vector3 delta = centrePos-transform.parent.position;
+            transform.position -= delta;
+            transform.parent.position += delta;
+            transform.parent.rotation = rotVelocity * transform.parent.rotation;
+
+            SFXController.singleton.UpdateDragNoise(rDown || lDown, 
+                scaleVelocity,
+                posVelocity.magnitude + 1-Quaternion.Dot(rotVelocity, Quaternion.identity));
+
+            wasBothDown = bothDown; wasLDown = lDown; wasRDown = rDown;
         }
+    }
 
-        scaleVelocity *= damping;
-        posVelocity *= damping;
-        rotVelocity = Quaternion.Lerp(Quaternion.identity, rotVelocity, damping);
+    public float flyAnimRotateDuration = 0.2f, flyAnimPauseDuration = 0.1f, flyAnimMoveDuration = 0.2f;
+    public Vector3 flyAnimEndOffset; //where the selected obj should end up
+    public float flyAnimMinScale = 5; //minimum scale of world
 
-        //scale around the controller centre 
-        float scaleFactor = 1 + scaleVelocity;
-        transform.localScale *= scaleFactor;
-        transform.position = (transform.position - centrePos)*scaleFactor + centrePos;
+    public void FlyTo(Transform target){
+        StartCoroutine(FlyToCo(target));
+    }
 
-        //position
-        transform.position += posVelocity * moveScale;
-
-        //rotation
-        //Quaternion finalRot = startRot* rotVelocity;
-        Vector3 delta = centrePos-transform.parent.position;
+    IEnumerator FlyToCo(Transform target){
+        inputAllowed = false;
+        posVelocity = Vector3.zero;
+        rotVelocity = Quaternion.identity;
+        scaleVelocity = 0;
+        wasBothDown = wasLDown = wasRDown = false;
+        
+        //rotate cloud so point lines up with view vector
+        Vector3 delta = headAnchor.position - transform.parent.position;
         transform.position -= delta;
         transform.parent.position += delta;
-        transform.parent.rotation = rotVelocity * transform.parent.rotation;
+        
+        Quaternion startRot = transform.parent.rotation,
+            endRot = Quaternion.FromToRotation(target.position - headAnchor.position,
+                headAnchor.forward);
 
-        wasBothDown = bothDown; wasLDown = lDown; wasRDown = rDown;
+        var t = 0f;
+        while(t<flyAnimRotateDuration){
+            float tt = t/flyAnimRotateDuration-1;
+            float f = 1+tt*tt*tt;
+
+            transform.parent.rotation = Quaternion.Lerp(startRot, endRot, f);
+
+            t+=Time.deltaTime;
+            yield return null;
+        }
+        transform.parent.rotation = endRot;
+
+        t = 0;
+        while(t<flyAnimPauseDuration){ t+=Time.deltaTime; yield return null;}
+
+        //move point to in front of the user. also scale space.
+        Vector3 startPos = transform.position,
+            endPos = transform.position +  //current pos
+                (headAnchor.position + headAnchor.rotation*flyAnimEndOffset) //desired target pos
+                 - target.position; //current target pos
+
+        float oldScale = transform.localScale.x, newScale = Mathf.Max(oldScale, flyAnimMinScale);
+            
+        t = 0;
+        while(t<flyAnimMoveDuration){
+            float tt = t/flyAnimMoveDuration-1;
+            float f = 1+tt*tt*tt;
+
+            transform.position = Vector3.Lerp(startPos, endPos, f);
+            float s = Mathf.Lerp(oldScale, newScale, f);
+            //transform.localScale = new Vector3(s,s,s);
+            t+=Time.deltaTime;
+            yield return null;
+        }
+        transform.position = endPos;
+        transform.localScale = new Vector3(newScale,newScale,newScale);
+        inputAllowed = true;
     }
 }

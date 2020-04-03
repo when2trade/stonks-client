@@ -14,11 +14,13 @@ public class PlotPoint : Clickable
         }
         GetComponentInChildren<TextMeshPro>().text = symbol;
         this.symbol = symbol;
+        gameObject.name = symbol;
     }
 
     public override void Click(Vector3 hitpos){
         if(canvasOpen) InfoPanelController.singleton.ClosePointPanel(this);
         else InfoPanelController.singleton.OpenPointPanel(this);
         canvasOpen = !canvasOpen;
+        RelationalScatterPlotter.singleton.ShowEdgesConnectedTo(symbol);
     }
 }
