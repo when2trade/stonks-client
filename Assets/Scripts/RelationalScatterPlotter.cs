@@ -5,10 +5,20 @@ using UnityEngine;
 
 /// <summary>
 /// Makes a 3D scatter plot from the input dataset.
-/// TODO remove random point/edge data!
 /// </summary>
 public class RelationalScatterPlotter : MonoBehaviour
 {
+    private static RelationalScatterPlotter singletonInstance;
+    public static RelationalScatterPlotter singleton { get { return singletonInstance; } }
+    void Awake(){
+        if (singletonInstance != null && singletonInstance != this){
+        Destroy(this);
+        return;
+        } else {
+        singletonInstance = this;
+        }
+    }
+
     public GameObject pointPrefab, edgePrefab;
 
     public int pointCount = 100;
@@ -23,13 +33,18 @@ public class RelationalScatterPlotter : MonoBehaviour
     
     public Transform headTransform; //reference to head for billboarding
 
+    Dictionary<string, List<GameObject>> edgesIncidentToSymbol = new Dictionary<string, List<GameObject>>();
+    Dictionary<string, GameObject> symbolToObj = new Dictionary<string, GameObject>();
+    List<GameObject> edgesVisible = new List<GameObject>();
+
+
     void Start()
     {
         MakePlot();
     }
 
     /// <summary>
-    /// Make a random spread of points and edges, as children of this object.s
+    /// Make a random spread of points and edges, as children of this object.
     /// </summary>
     void MakePlot(){
         ScaleNegator scaler = GetComponent<ScaleNegator>();
@@ -47,6 +62,7 @@ public class RelationalScatterPlotter : MonoBehaviour
             obj.GetComponent<SpriteRenderer>().color = sectorColors.ColorOfCategory(Dataset.categoryMap[symbol]);
 
             scaler.objectsToScale.Add(obj.transform);
+            symbolToObj.Add(symbol, obj);
 
             //add relevant edges to plot
             foreach(var symbolIndexPair2 in Dataset.indexMap){
@@ -60,12 +76,17 @@ public class RelationalScatterPlotter : MonoBehaviour
                     //instantiate and position edges
                     Vector3 p2 = Vector3.Scale(Dataset.points[index2], plotScaler);
                     Vector3 vec = (p2-p1);
-                    Transform edgeObj = Instantiate(edgePrefab, transform).transform;
-                    edgeObj.localPosition = (p1+p2)/2.0f;
-                    edgeObj.localRotation = Quaternion.LookRotation(vec, Vector3.up);
-                    edgeObj.localScale = new Vector3(1,1, vec.magnitude);
+                    GameObject edgeObj = Instantiate(edgePrefab, transform);
+                    edgeObj.transform.localPosition = (p1+p2)/2.0f;
+                    edgeObj.transform.localRotation = Quaternion.LookRotation(vec, Vector3.up);
+                    edgeObj.transform.localScale = new Vector3(1,1, vec.magnitude);
 
                     edgeObj.GetComponent<PlotEdge>().SetupEdge(symbol, symbol2, relation);
+
+                    AddToIncidence(symbol, edgeObj);
+                    AddToIncidence(symbol2, edgeObj);
+
+                    edgeObj.SetActive(false);
 
                     totalEdges+=1;
                 }
@@ -74,4 +95,36 @@ public class RelationalScatterPlotter : MonoBehaviour
         Debug.Log(totalEdges+" total edges");
     }
 
+    void AddToIncidence(string symbol, GameObject edge){
+        if(!edgesIncidentToSymbol.ContainsKey(symbol))
+            edgesIncidentToSymbol.Add(symbol, new List<GameObject>());
+        edgesIncidentToSymbol[symbol].Add(edge);
+    }
+
+    public void ShowEdgesConnectedTo(string symbol){
+        bool didOneAppear = false;
+        if(edgesIncidentToSymbol.ContainsKey(symbol)){
+            foreach(GameObject edge in edgesIncidentToSymbol[symbol]){
+                if(!edge.active) didOneAppear = true;
+                edge.SetActive(true);
+                edgesVisible.Add(edge);
+            }
+        }
+        if(didOneAppear)
+            SFXController.singleton.PlaySfxEdge(true, headTransform.position); 
+    }
+
+    public GameObject GetPoint(string symbol){
+        if(symbolToObj.ContainsKey(symbol)){
+            return symbolToObj[symbol];
+        }
+        return null;
+    }
+
+    public void HideAllEdges(){
+        foreach(GameObject edge in edgesVisible)
+            edge.SetActive(false);
+        edgesVisible = new List<GameObject>();     
+        SFXController.singleton.PlaySfxEdge(false, headTransform.position);
+    }
 }

@@ -38,8 +38,8 @@ public class ControllerRayInteraction : MonoBehaviour
         posesL[0] = rayAnchorL.position;
         posesR[0] = rayAnchorR.position;
 
-        posesL[1] = UpdateRay(rayAnchorL, lineL, ref oldHoverL);
-        posesR[1] = UpdateRay(rayAnchorR, lineR, ref oldHoverR);
+        posesL[1] = UpdateRay(rayAnchorL, lineL, ref oldHoverL, true);
+        posesR[1] = UpdateRay(rayAnchorR, lineR, ref oldHoverR, false);
 
         //reposition rays
         lineL.SetPositions(posesL);
@@ -48,13 +48,17 @@ public class ControllerRayInteraction : MonoBehaviour
         //if trigger released, something's over the ray, and controller hasn't moved too far, treat as click
         if(!lDown && wasLDown){
             lineL.enabled = true;
-            if(oldHoverL != null && distTravelledL < maxControllerMove)
+            if(oldHoverL != null && distTravelledL < maxControllerMove){
                 oldHoverL.GetComponent<Clickable>()?.Click(posesL[1]);
+                SFXController.singleton.PlayClick(posesL[0]);
+            }
         }
         if(!rDown && wasRDown){
             lineR.enabled = true;
-            if(oldHoverR != null && distTravelledR < maxControllerMove)
+            if(oldHoverR != null && distTravelledR < maxControllerMove){
                 oldHoverR.GetComponent<Clickable>()?.Click(posesR[1]);
+                SFXController.singleton.PlayClick(posesR[0]);
+            }
         }
 
         if(lDown){
@@ -79,13 +83,15 @@ public class ControllerRayInteraction : MonoBehaviour
 
     //does raycasts & sends hover events.
     //returns a Vector3 for where the visible line should end.
-    Vector3 UpdateRay(Transform rayAnchor, LineRenderer line, ref Transform oldHover){
+    Vector3 UpdateRay(Transform rayAnchor, LineRenderer line, ref Transform oldHover, bool isLeft){
         RaycastHit hit;
         if(Physics.Raycast(rayAnchor.position, rayAnchor.up, out hit, raycastLimit)){ //if we hit an object,
             line.colorGradient = lineGradientHit;
 
             if(hit.transform != oldHover){ //if this is a new object,
                 hit.transform.GetComponent<PointHoverGlow>()?.HoverEnter(); //do hover enter animation (if applicable)
+                SFXController.singleton.PlayHover(rayAnchor.position);
+                SFXController.singleton.PlayVibrate(isLeft);
                 
                  if(oldHover!=null){ //if we were hovering over something else last frame,
                    oldHover.GetComponent<PointHoverGlow>()?.HoverExit(); //do hover exit animation (if applicable)

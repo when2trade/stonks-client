@@ -128,8 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   referenceTransform: {fileID: 0}
   targetBehaviour: {fileID: 494233086276675395}
-  minDist: 0
-  maxDist: 2
+  minDist: 0.2
+  maxDist: 6
 --- !u!114 &-136858825764633687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,8 +145,8 @@ MonoBehaviour:
   referenceTransform: {fileID: 0}
   nearFadeStart: 0.25
   nearFadeEnd: 0.15
-  farFadeStart: 3
-  farFadeEnd: 6
+  farFadeStart: 6
+  farFadeEnd: 8
   sprite: {fileID: 6596386001694916072}
 --- !u!114 &7870597637747703400
 MonoBehaviour:
