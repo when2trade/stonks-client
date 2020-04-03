@@ -15,11 +15,19 @@ public class SimpleDistanceFader : SimpleTransformInfluenced
     void Update()
     {
         float dist = (transform.position - referenceTransform.position).magnitude;
+        if(dist < nearFadeEnd || dist > farFadeEnd){
+          sprite.enabled = false;
+        }
+        else{
+          sprite.enabled = true;
 
-        Color c = sprite.color;
-        c.a = Mathf.Clamp01(Mathf.InverseLerp(nearFadeEnd, nearFadeStart, dist)) * 
-          (1-Mathf.Clamp01(Mathf.InverseLerp(farFadeStart, farFadeEnd, dist)));
-
-        sprite.color = c;
+          float opacity = Mathf.Clamp01(Mathf.InverseLerp(nearFadeEnd, nearFadeStart, dist)) * 
+            (1-Mathf.Clamp01(Mathf.InverseLerp(farFadeStart, farFadeEnd, dist)));
+          //^basically a trapezium shape that fades from 0-1 between the near/far distances
+          
+          Color c = sprite.color;
+          c.a = opacity;
+          sprite.color = c;
+        }
     }
 }

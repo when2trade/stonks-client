@@ -13,7 +13,7 @@ public class SimpleDistanceHider : SimpleTransformInfluenced
 
     void Update()
     {
-        float mag = (transform.position - referenceTransform.position).sqrMagnitude;
+        float mag = (transform.position - referenceTransform.position).magnitude;
         targetBehaviour.enabled = mag > minDist && mag < maxDist;
     }
 }
