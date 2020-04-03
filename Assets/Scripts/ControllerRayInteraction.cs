@@ -49,12 +49,12 @@ public class ControllerRayInteraction : MonoBehaviour
         if(!lDown && wasLDown){
             lineL.enabled = true;
             if(oldHoverL != null && distTravelledL < maxControllerMove)
-                oldHoverL.GetComponent<Clickable>()?.Click();
+                oldHoverL.GetComponent<Clickable>()?.Click(posesL[1]);
         }
         if(!rDown && wasRDown){
             lineR.enabled = true;
             if(oldHoverR != null && distTravelledR < maxControllerMove)
-                oldHoverR.GetComponent<Clickable>()?.Click();
+                oldHoverR.GetComponent<Clickable>()?.Click(posesR[1]);
         }
 
         if(lDown){

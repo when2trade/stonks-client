@@ -11,8 +11,14 @@ public class SimpleLockOnto : SimpleTransformInfluenced
     public bool lockRotation = false;
     public bool lockScale = false;
 
+    public Vector3 localOffset = Vector3.zero;
+
     void LateUpdate(){
-        if(lockPosition) transform.position = referenceTransform.position;
+        Apply();
+    }
+
+    public void Apply(){
+        if(lockPosition) transform.position = referenceTransform.position + referenceTransform.rotation * localOffset;
         if(lockRotation) transform.rotation = referenceTransform.rotation;
         if(lockScale) transform.localScale = referenceTransform.localScale;
     }

@@ -16,7 +16,7 @@ public class PlotPoint : Clickable
         this.symbol = symbol;
     }
 
-    public override void Click(){
+    public override void Click(Vector3 hitpos){
         if(canvasOpen) InfoPanelController.singleton.ClosePointPanel(this);
         else InfoPanelController.singleton.OpenPointPanel(this);
         canvasOpen = !canvasOpen;

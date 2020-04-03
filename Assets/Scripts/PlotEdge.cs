@@ -25,9 +25,9 @@ public class PlotEdge : Clickable
     }
 
 
-    public override void Click(){
+    public override void Click(Vector3 hitPos){
         if(canvasOpen) InfoPanelController.singleton.CloseEdgePanel(this);
-        else InfoPanelController.singleton.OpenEdgePanel(this);
+        else InfoPanelController.singleton.OpenEdgePanel(this, hitPos);
         canvasOpen = !canvasOpen;
     }
 }

@@ -77,14 +77,19 @@ public class InfoPanelController : MonoBehaviour{
     pointPanelsInUse.Add(point, go);
   }
 
-  public void OpenEdgePanel(PlotEdge edge){
+  public void OpenEdgePanel(PlotEdge edge, Vector3 hitPos){
     CloseAllPanels();
 
     //get an unused edge panel, lock it on and play anim
     GameObject go = Dequeue(edgePanelPool);
 
     go.SetActive(true);
-    go.GetComponent<SimpleLockOnto>().referenceTransform = edge.transform;
+
+    var lockon = go.GetComponent<SimpleLockOnto>();
+    lockon.referenceTransform = edge.transform;
+    lockon.localOffset = Quaternion.Inverse(edge.transform.rotation)*(hitPos - edge.transform.position);
+    lockon.Apply(); //necessary for SnapToDesiredRotation to work
+
     go.GetComponent<SimpleBillboardDampened>().referenceTransform = cameraAnchor;
 
     //set initial pos/rot

@@ -642,6 +642,7 @@ MonoBehaviour:
   lockPosition: 1
   lockRotation: 0
   lockScale: 0
+  localOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &6482770470974770520
 MonoBehaviour:
   m_ObjectHideFlags: 0
