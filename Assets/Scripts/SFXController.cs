@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Audio;
 
 /// <summary>
 /// Plays sound effects.
@@ -21,9 +21,13 @@ public class SFXController : MonoBehaviour
 
     public AudioClip sfxHover, sfxClick, sfxEdgeShow, sfxEdgeHide, sfxDrag;
     public float volumeHover, volumeClick, volumeEdgeShow, volumeDrag;
+    public AudioMixer mixer;
 
     public float dragNoiseLowpassFreqMin = 100, dragNoiseLowpassFreqScale = 1000;
     public float dragNoisePitchScale = 0.2f;
+    public float dragNoiseBasePitch = 1.3f;
+    [Range(0,1)]
+    public float dragNoiseDamping = 0.9f;
 
     public float vibrateDuration = .1f;
     [Range(0,1)]
@@ -31,14 +35,12 @@ public class SFXController : MonoBehaviour
     [Range(0,1)]
     public float vibrateAmplitude = .3f;
 
-    AudioLowPassFilter lowpass;
     AudioSource source;
-
-    float vibrateRemainL = 0, vibrateRemainR = 0;
 
     void Start(){
       source = GetComponent<AudioSource>();
-      lowpass = GetComponent<AudioLowPassFilter>();
+      source.clip = sfxDrag;
+      source.Play();
     }
 
     public void PlayHover(Vector3 pos){
@@ -53,38 +55,23 @@ public class SFXController : MonoBehaviour
     }
 
     public void PlayVibrate(bool isLeft){
-      if(isLeft) vibrateRemainL = vibrateDuration;
-      else vibrateRemainR = vibrateDuration;
-      OVRInput.SetControllerVibration(vibrateFrequency, vibrateAmplitude, isLeft ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch);
+      var type = isLeft ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch;
+      OVRInput.SetControllerVibration(vibrateFrequency, vibrateAmplitude, type);
+      StartCoroutine(StopVibrate(type));
     }
 
-    void Update(){
-      if(vibrateRemainL > 0){
-        vibrateRemainL -= Time.deltaTime;
-        if(vibrateRemainL <=0 )
-          OVRInput.SetControllerVibration(0,0, OVRInput.Controller.LTouch);
-      }
-      if(vibrateRemainR > 0){
-        vibrateRemainR -= Time.deltaTime;
-        if(vibrateRemainR <=0 )
-          OVRInput.SetControllerVibration(0,0, OVRInput.Controller.RTouch);
-      }
+    IEnumerator StopVibrate(OVRInput.Controller type){
+      yield return new WaitForSeconds(vibrateDuration);
+      OVRInput.SetControllerVibration(0,0, type);
     }
-
 
     bool wasOn = false;
-    public void UpdateDragNoise(bool on, float scaleVelocity, float moveVelocity){
-      if(on){
-        if(!wasOn){
-          source.clip = sfxDrag;
-          source.Play();
-        }
-        lowpass.cutoffFrequency =  dragNoiseLowpassFreqMin +  moveVelocity * dragNoiseLowpassFreqScale;    
-        source.pitch = 1 - scaleVelocity * dragNoisePitchScale;    
-      }
-      else{
-        if(wasOn) source.Stop();
-      }
-      wasOn = on;
+    float moveDamped = 0, scaleDamped = 0;
+    public void UpdateDragNoise(float scaleVelocity, float moveVelocity){
+        scaleDamped = Mathf.Lerp(scaleVelocity, scaleDamped, dragNoiseDamping);
+        moveDamped = Mathf.Lerp(moveVelocity, moveDamped, dragNoiseDamping);
+        //mixer.SetFloat("cutoffFreq", dragNoiseLowpassFreqMin +  moveDamped * dragNoiseLowpassFreqScale);
+        source.volume = moveDamped * dragNoiseLowpassFreqScale * volumeDrag;
+        source.pitch = dragNoiseBasePitch - scaleDamped * dragNoisePitchScale;    
     }
 }

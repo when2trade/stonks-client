@@ -127,9 +127,9 @@ public class StretchScaler : MonoBehaviour
             transform.parent.position += delta;
             transform.parent.rotation = rotVelocity * transform.parent.rotation;
 
-            SFXController.singleton.UpdateDragNoise(rDown || lDown, 
-                scaleVelocity,
-                posVelocity.magnitude + 1-Quaternion.Dot(rotVelocity, Quaternion.identity));
+            float noiseAmnt = posVelocity.magnitude + 1-Quaternion.Dot(rotVelocity.normalized, Quaternion.identity) + Mathf.Abs(scaleVelocity);
+            SFXController.singleton.UpdateDragNoise(scaleVelocity, noiseAmnt);
+            Debug.Log(noiseAmnt);
 
             wasBothDown = bothDown; wasLDown = lDown; wasRDown = rDown;
         }
