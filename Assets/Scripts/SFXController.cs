@@ -65,7 +65,6 @@ public class SFXController : MonoBehaviour
       OVRInput.SetControllerVibration(0,0, type);
     }
 
-    bool wasOn = false;
     float moveDamped = 0, scaleDamped = 0;
     public void UpdateDragNoise(float scaleVelocity, float moveVelocity){
         scaleDamped = Mathf.Lerp(scaleVelocity, scaleDamped, dragNoiseDamping);

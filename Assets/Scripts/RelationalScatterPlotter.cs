@@ -105,7 +105,7 @@ public class RelationalScatterPlotter : MonoBehaviour
         bool didOneAppear = false;
         if(edgesIncidentToSymbol.ContainsKey(symbol)){
             foreach(GameObject edge in edgesIncidentToSymbol[symbol]){
-                if(!edge.active) didOneAppear = true;
+                if(!edge.activeSelf) didOneAppear = true;
                 edge.SetActive(true);
                 edgesVisible.Add(edge);
             }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -131,7 +131,7 @@ public class StretchScaler : MonoBehaviour
 
             float noiseAmnt = posVelocity.magnitude + 1-Quaternion.Dot(rotVelocity.normalized, Quaternion.identity) + Mathf.Abs(scaleVelocity);
             SFXController.singleton.UpdateDragNoise(scaleVelocity, noiseAmnt);
-            Debug.Log(noiseAmnt);
+            //Debug.Log(noiseAmnt);
 
             wasBothDown = bothDown; wasLDown = lDown; wasRDown = rDown;
         }

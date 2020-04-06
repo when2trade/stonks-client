@@ -14,6 +14,6 @@ public class ServerTest : MonoBehaviour
   }
 
   void Interpret(DataCandle candle){
-    Debug.Log(candle.s);
+    Debug.Log(candle.c[candle.c.Length-1]);
   }
 }
