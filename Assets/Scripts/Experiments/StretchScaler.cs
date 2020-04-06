@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,8 +59,10 @@ public class StretchScaler : MonoBehaviour
             float dist = handVec.magnitude;
             Vector3 centrePos = (lPos + rPos)/2f; //get centre point of controllers
 
-            bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > pressThreshold;
-            bool rDown = Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > pressThreshold;
+            bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > pressThreshold
+                || Input.GetButton("Fire3"); //left trigger or X button
+            bool rDown = Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > pressThreshold
+                || Input.GetButton("Fire1"); //right trigger or A button
             bool bothDown = lDown && rDown;
 
             if(bothDown){

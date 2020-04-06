@@ -41,8 +41,11 @@ public class ControllerRayInteraction : MonoBehaviour
 
     void LateUpdate() //(late cause we want to let the controllers move first!)
     {
-        bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > pressThreshold || Input.GetMouseButton(0);
-        bool rDown = Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > pressThreshold;
+        bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > pressThreshold 
+            || Input.GetButton("Fire3") //left trigger or X button
+            || Input.GetMouseButton(0);
+        bool rDown = Input.GetAxis("Oculus_CrossPlatform_SecondaryIndexTrigger") > pressThreshold
+            || Input.GetButton("Fire1"); //right trigger or A button
 
         posesL[0] = rayAnchorL.position;
         posesR[0] = rayAnchorR.position;
