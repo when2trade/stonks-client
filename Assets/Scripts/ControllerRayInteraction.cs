@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +30,15 @@ public class ControllerRayInteraction : MonoBehaviour
     Vector3 oldPosL, oldPosR;
     float distTravelledL = 0, distTravelledR = 0;
 
+    public GameObject lockonEffect;
+    SimpleLockOnto lockonEffectLock;
+    Animation lockonEffectAnim;
+
+    void Start(){
+        lockonEffectLock = lockonEffect.GetComponent<SimpleLockOnto>();
+        lockonEffectAnim = lockonEffect.GetComponent<Animation>();
+    }
+
     void LateUpdate() //(late cause we want to let the controllers move first!)
     {
         bool lDown = Input.GetAxis("Oculus_CrossPlatform_PrimaryIndexTrigger") > pressThreshold || Input.GetMouseButton(0);
@@ -48,6 +57,7 @@ public class ControllerRayInteraction : MonoBehaviour
         //if trigger released, something's over the ray, and controller hasn't moved too far, treat as click
         if(!lDown && wasLDown){
             lineL.enabled = true;
+            lockonEffect.SetActive(false);
             if(oldHoverL != null && distTravelledL < maxControllerMove){
                 oldHoverL.GetComponent<Clickable>()?.Click(posesL[1]);
                 SFXController.singleton.PlayClick(posesL[0]);
@@ -55,6 +65,7 @@ public class ControllerRayInteraction : MonoBehaviour
         }
         if(!rDown && wasRDown){
             lineR.enabled = true;
+            lockonEffect.SetActive(false);
             if(oldHoverR != null && distTravelledR < maxControllerMove){
                 oldHoverR.GetComponent<Clickable>()?.Click(posesR[1]);
                 SFXController.singleton.PlayClick(posesR[0]);
@@ -65,16 +76,26 @@ public class ControllerRayInteraction : MonoBehaviour
             distTravelledL += (rayAnchorL.position - oldPosL).magnitude;
             if(!wasLDown) distTravelledL = 0;
 
-            if(distTravelledL > maxControllerMove)
+            if(distTravelledL > maxControllerMove){
                 lineL.enabled = false;
+                lockonEffect.SetActive(true);
+                lockonEffect.transform.position = rayAnchorL.position;
+                lockonEffectLock.referenceTransform = rayAnchorL;
+                lockonEffectAnim.Play();
+            }
         }
 
         if(rDown){
             distTravelledR += (rayAnchorR.position - oldPosR).magnitude;
             if(!wasRDown) distTravelledR = 0;
 
-            if(distTravelledR > maxControllerMove)
+            if(distTravelledR > maxControllerMove){
                 lineR.enabled = false;
+                lockonEffect.SetActive(true);
+                lockonEffect.transform.position = rayAnchorR.position;
+                lockonEffectLock.referenceTransform = rayAnchorR;
+                lockonEffectAnim.Play();
+            }
         }
         
         wasLDown = lDown; wasRDown = rDown;
