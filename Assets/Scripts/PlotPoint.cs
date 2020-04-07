@@ -17,10 +17,33 @@ public class PlotPoint : Clickable
         gameObject.name = symbol;
     }
 
+    float[] stockData;
+    GameObject panelForThis;
+
     public override void Click(Vector3 hitpos){
         if(canvasOpen) InfoPanelController.singleton.ClosePointPanel(this);
-        else InfoPanelController.singleton.OpenPointPanel(this);
+        else{
+            panelForThis = InfoPanelController.singleton.OpenPointPanel(this);
+            RelationalScatterPlotter.singleton.ShowEdgesConnectedTo(symbol);
+
+            if(stockData == null)
+                ServerFetch.singleton.GetStockData("MSFT", LoadStockData);
+            else
+                ShowStockData();
+
+        }
         canvasOpen = !canvasOpen;
-        RelationalScatterPlotter.singleton.ShowEdgesConnectedTo(symbol);
+    }
+
+    void LoadStockData(DataCandle candle){
+        stockData = new float[candle.c.Length];
+        for(int i=0; i<stockData.Length; i++){
+            stockData[i] = (candle.o[i] + candle.c[i])/2;
+        }
+        ShowStockData();
+    }
+
+    void ShowStockData(){
+        panelForThis.GetComponentInChildren<StockGraphPlotter>().ShowPlot(stockData);
     }
 }

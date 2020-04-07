@@ -74,6 +74,7 @@ crashlytics-build.properties
 
 #remove FPS Counter
 [Aa]ssets/Tayx/
+[Aa]ssets/unity-ui-extensions/
 
 #hide dataset
 [Aa]ssets/Resources/Data/

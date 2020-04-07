@@ -57,7 +57,7 @@ public class InfoPanelController : MonoBehaviour{
     return x;
   }
 
-  public void OpenPointPanel(PlotPoint point){
+  public GameObject OpenPointPanel(PlotPoint point){
     CloseAllPanels();
     //get an unused point panel, lock it on and play anim
     GameObject go = Dequeue(pointPanelPool);
@@ -75,6 +75,8 @@ public class InfoPanelController : MonoBehaviour{
     go.transform.Find("CANVAS/MASK/NAME").GetComponent<Text>().text = Dataset.GetName(point.symbol);
 
     pointPanelsInUse.Add(point, go);
+
+    return go;
   }
 
   public void OpenEdgePanel(PlotEdge edge, Vector3 hitPos){
