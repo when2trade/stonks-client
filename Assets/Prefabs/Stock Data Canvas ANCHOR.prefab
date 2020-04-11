@@ -400,11 +400,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c58ebaf2fa72e2c4bbdcaad3375b20b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValue: {fileID: 0}
   lineLow: {fileID: 2871500872546846068}
   lineHigh: {fileID: 7251970398091630070}
   lineLeft: {fileID: 7847922860161056759}
   lineRight: {fileID: 1124858209908969710}
+  stockPanel: {fileID: 2675304845504964602}
   line: {fileID: 4983151718986725376}
   rangeX: {x: -100, y: 100}
   rangeY: {x: -75, y: 75}

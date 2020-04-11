@@ -34,7 +34,7 @@ MonoBehaviour:
   - {r: 0.54509807, g: 0.29803923, b: 0.63529414, a: 1}
   - {r: 0.654902, g: 0.41960788, b: 0.23529413, a: 1}
   - {r: 0.46274513, g: 0.81568635, b: 0.8196079, a: 1}
-  weakPositiveColor: {r: 0.6448024, g: 0.8490566, b: 0.68905747, a: 1}
-  strongPositiveColor: {r: 0, g: 1, b: 0, a: 1}
-  weakNegativeColor: {r: 0.7924528, g: 0.6167675, b: 0.6167675, a: 1}
-  strongNegativeColor: {r: 1, g: 0, b: 0, a: 1}
+  weakPositiveColor: {r: 0.6448024, g: 0.8490566, b: 0.68905747, a: 0.6784314}
+  strongPositiveColor: {r: 0, g: 1, b: 0, a: 0.6784314}
+  weakNegativeColor: {r: 0.7924528, g: 0.6167675, b: 0.6167675, a: 0.6784314}
+  strongNegativeColor: {r: 1, g: 0, b: 0, a: 0.6784314}
