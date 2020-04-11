@@ -6,7 +6,8 @@ using UnityEngine.UI.Extensions;
 
 public class StockGraphPlotter : MonoBehaviour
 {
-  public Text currentValue, lineLow, lineHigh, lineLeft, lineRight;
+  public Text lineLow, lineHigh, lineLeft, lineRight;
+  public GameObject stockPanel;
   public UILineRenderer line;
 
   public Vector2 rangeX, rangeY;
@@ -30,6 +31,19 @@ public class StockGraphPlotter : MonoBehaviour
     line.Points = points;
     lineLow.text = min.ToString("0.0");
     lineHigh.text = max.ToString("0.0");
+
+    stockPanel.SetActive(true);
+    lineLow.gameObject.SetActive(true);
+    lineHigh.gameObject.SetActive(true);
+    lineLeft.gameObject.SetActive(true);
+    lineRight.gameObject.SetActive(true);
   }
 
+  public void HidePlot(){
+    stockPanel.SetActive(false);
+    lineLow.gameObject.SetActive(false);
+    lineHigh.gameObject.SetActive(false);
+    lineLeft.gameObject.SetActive(false);
+    lineRight.gameObject.SetActive(false);
+  }
 }

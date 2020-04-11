@@ -26,8 +26,10 @@ public class PlotPoint : Clickable
             panelForThis = InfoPanelController.singleton.OpenPointPanel(this);
             RelationalScatterPlotter.singleton.ShowEdgesConnectedTo(symbol);
 
-            if(stockData == null)
-                ServerFetch.singleton.GetStockData("MSFT", LoadStockData);
+            if(stockData == null){
+                panelForThis.GetComponentInChildren<StockGraphPlotter>().HidePlot();
+                ServerFetch.singleton.GetStockData(symbol, LoadStockData);
+            }
             else
                 ShowStockData();
 
